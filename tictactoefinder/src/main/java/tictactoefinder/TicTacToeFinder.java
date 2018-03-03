@@ -52,7 +52,7 @@ public class TicTacToeFinder implements Command {
         res = Preparation.crop(res);
 
         //Decoupage
-        long[][][] borders = Spliting.detection(res);
+        long[][] borders = Spliting.detection(res);
         ArrayList<Img<DoubleType>> tiles = Spliting.split(res, borders);
 
         Integer[] matrix = new Integer[9];
