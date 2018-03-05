@@ -25,6 +25,7 @@ public abstract class Preparation extends Step{
      * @param img
      * @return res la nouvelle image avec le Seuillage
      */
+
     public static Img<DoubleType> threshold(Img<DoubleType> img)
     {
 
