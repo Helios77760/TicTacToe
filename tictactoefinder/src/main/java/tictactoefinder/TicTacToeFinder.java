@@ -83,7 +83,22 @@ public class TicTacToeFinder implements Command {
         long[] imgSize = getDimensions(image);
         Img<DoubleType> res = ArrayImgs.doubles(imgSize);
 
-        //TODO
+        RandomAccess<? extends RealType> cursorIn = image.randomAccess();
+        RandomAccess<DoubleType> cursorOut = res.randomAccess();
+
+        long[] posIn = {0,0}, posOut = {0,0};
+
+        for(int x=0; x<imgSize[0];x++)
+        {
+            for(int y=0; y<imgSize[1];y++)
+            {
+                posIn[0] = posOut[0] = x;
+                posIn[1] = posOut[1] = y;
+                cursorOut.setPosition(posOut);
+                cursorIn.setPosition(posIn);
+                cursorOut.get().set(cursorIn.get().getRealDouble());
+            }
+        }
 
         return res;
     }
