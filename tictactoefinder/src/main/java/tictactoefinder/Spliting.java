@@ -31,14 +31,9 @@ public class Spliting extends Step {
 
         long[][] res = new long[9][];
 
-
-
         RandomAccess<DoubleType> imgCursor = img.randomAccess();
         Line[] horizontalDetect = new Line[(int)imgSize[0]];
         Line[] verticalDetect = new Line[(int)imgSize[1]];
-
-
-
 
         //Projection des lignes horizontales
         projection(imgSize, imgCursor, horizontalDetect, 0, 1);
@@ -46,9 +41,9 @@ public class Spliting extends Step {
         //Projection des lignes verticales
         projection(imgSize, imgCursor, verticalDetect, 1, 0);
 
+        //On trie les lignes par valeur de la projection
         Line[] hDetect = horizontalDetect.clone();
         Line[] vDetect = verticalDetect.clone();
-
         Arrays.sort(hDetect);
         Arrays.sort(vDetect);
 
@@ -57,6 +52,7 @@ public class Spliting extends Step {
         ArrayList<Integer> detectedHLinesEnd = new ArrayList<>();
         ArrayList<Integer> detectedVLinesEnd = new ArrayList<>();
 
+        //Détection des lignes horizontales principales
         detectLinesFromProjection(horizontalDetect, hDetect, detectedHLinesBegin, detectedHLinesEnd);
         if(detectedHLinesBegin.size() < 2) //On n'a trouvé trop peu de lignes, on va diviser en 3 parts egales
         {
@@ -64,7 +60,11 @@ public class Spliting extends Step {
             detectedHLinesBegin.add((int) (imgSize[0]/0.66667));
             detectedHLinesEnd.add(detectedHLinesBegin.get(0)+1);
             detectedHLinesEnd.add(detectedHLinesBegin.get(1)+1);
-        }else decimateLines(horizontalDetect, detectedHLinesBegin, detectedHLinesEnd);
+        }else
+        {
+            decimateLines(horizontalDetect, detectedHLinesBegin, detectedHLinesEnd); //Si il y a trop de lignes détectées alors on ne garde que les plus contrastées
+        }
+        //Détection des lignes verticales principales
         detectLinesFromProjection(verticalDetect, vDetect, detectedVLinesBegin, detectedVLinesEnd);
         if(detectedVLinesBegin.size() < 2) //On n'a trouvé trop peu de lignes, on va diviser en 3 parts egales
         {
@@ -73,9 +73,10 @@ public class Spliting extends Step {
             detectedVLinesEnd.add(detectedVLinesBegin.get(0)+1);
             detectedVLinesEnd.add(detectedVLinesBegin.get(1)+1);
         }else {
-            decimateLines(verticalDetect, detectedVLinesBegin, detectedVLinesEnd);
+            decimateLines(verticalDetect, detectedVLinesBegin, detectedVLinesEnd); //Si il y a trop de lignes détectées alors on ne garde que les plus contrastées
         }
 
+        //On utilise les lignes trouvées comme bordures des cases du plateau
         res[0] =  new long[]{0, detectedHLinesBegin.get(0), 0, detectedVLinesBegin.get(0)};
         res[1] =  new long[]{detectedHLinesEnd.get(0), detectedHLinesBegin.get(1), 0, detectedVLinesBegin.get(0)};
         res[2] =  new long[]{detectedHLinesEnd.get(1), imgSize[0], 0, detectedVLinesBegin.get(0)};
@@ -95,22 +96,27 @@ public class Spliting extends Step {
         if(detectedLinesBegin.size()>2) //On a trouvé trop de lignes, on va ne garder que les plus contrastés
         {
             Line[] values = new Line[detectedLinesBegin.size()];
-            for(int i=0; i<values.length;i++)
+            for(int i=0; i<values.length;i++) //Pour chaque ligne...
             {
                 values[i]=new Line(i,0);
-                for(int j = detectedLinesBegin.get(i); j< detectedLinesEnd.get(i); j++)
+                for(int j = detectedLinesBegin.get(i); j< detectedLinesEnd.get(i); j++) //... on prend la valeur de la projection...
                 {
                     values[i].value+= detect[j].value;
                 }
-                values[i].value/=(detectedLinesEnd.get(i)- detectedLinesBegin.get(i));
+                values[i].value/=(detectedLinesEnd.get(i)- detectedLinesBegin.get(i)); //... pour en faire une moyenne pour la ligne complete
             }
-            Arrays.sort(values);
+
+            Arrays.sort(values); //On trie les lignes moyennes par leur valeur
+
             ArrayList<Integer> tempBegin = new ArrayList<>();
             ArrayList<Integer> tempEnd = new ArrayList<>();
+
+            //On ajoute la meilleure ligne à une liste temporaire...
             tempBegin.add(detectedLinesBegin.get(values[values.length-1].index));
             tempEnd.add(detectedLinesEnd.get(values[values.length-1].index));
+
             Integer begin = detectedLinesBegin.get(values[values.length-2].index);
-            if(detectedLinesBegin.get(begin) > tempBegin.get(0))
+            if(detectedLinesBegin.get(begin) > tempBegin.get(0)) //... dans le bon ordre
             {
                 tempBegin.add(detectedLinesBegin.get(begin));
                 tempEnd.add(detectedLinesEnd.get(begin));
@@ -119,6 +125,8 @@ public class Spliting extends Step {
                 tempBegin.add(0, detectedLinesBegin.get(begin));
                 tempEnd.add(0, detectedLinesEnd.get(begin));
             }
+
+            //Puis on modifie la liste principale afin de n'avoir que 2 lignes à l'intérieur
             detectedLinesBegin.clear();
             detectedLinesEnd.clear();
             detectedLinesBegin.addAll(tempBegin);
@@ -130,6 +138,7 @@ public class Spliting extends Step {
         double percentileThreshold = 0.02;
         do {
             double threshold = sortedDetect[(int)(percentileThreshold* sortedDetect.length)].value;
+            //On considère que les lignes sont des suites de projections ayant une valeur inférieure à un percentile des valeurs totales
 
             detectedLinesBegin.clear();
             detectedLinesEnd.clear();
@@ -137,12 +146,12 @@ public class Spliting extends Step {
             boolean inLine = false;
             for(int i=0; i<detect.length;i++)
             {
-                if(detect[i].value >= threshold && !inLine)
+                if(detect[i].value <= threshold && !inLine) //Seuil atteint et on n'est pas dans une ligne => début d'une ligne
                 {
                     detectedLinesBegin.add(i);
                     inLine = true;
                 }
-                if(detect[i].value < threshold && inLine)
+                if(detect[i].value > threshold && inLine) //Seuil non atteint et on était dans une ligne => fin d'une ligne
                 {
                     detectedLinesEnd.add(i);
                     inLine = false;
@@ -152,7 +161,7 @@ public class Spliting extends Step {
             {
                 detectedLinesEnd.add(detect.length-1);
             }
-            if(detectedLinesBegin.size() != 2)
+            if(detectedLinesBegin.size() != 2) //Si on n'a pas 2 lignes, alors on augmente le percentile et on recommence
             {
                 percentileThreshold+=0.01;
             }else
@@ -192,6 +201,7 @@ public class Spliting extends Step {
             size[1] = borders[i][3] - borders[i][2];
             Img<DoubleType> sub = ArrayImgs.doubles(size);
             RandomAccess<DoubleType> subCursor = sub.randomAccess();
+            //On crée une image qui sera la copie d'une case, telle que définie par les bordures des lignes trouvées par l'étape précédente
 
             for(long subx=0, x=borders[i][0]; subx < size[0]; subx++, x++)
             {

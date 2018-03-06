@@ -1,6 +1,7 @@
 package tictactoefinder;
 
 import org.scijava.command.Command;
+import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -30,6 +31,9 @@ public class TicTacToeFinder implements Command {
 
     @Parameter(label = "Template croix")
     Dataset templateCross;
+
+    @Parameter
+    LogService logService;
 
     @Override
     public void run() {
@@ -71,8 +75,8 @@ public class TicTacToeFinder implements Command {
         }
 
         //Synthese
-        Synthesis.showBoardAsMatrix(matrix);
-        Synthesis.whoIsWinning(matrix);
+        Synthesis.showBoardAsMatrix(matrix, logService);
+        Synthesis.whoIsWinning(matrix, logService);
     }
 
     private Img<DoubleType> datasetToImgDouble(Dataset image)
