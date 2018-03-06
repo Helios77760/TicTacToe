@@ -85,11 +85,54 @@ public abstract class Preparation extends Step{
     public static Img<DoubleType> crop(Img<DoubleType> img)
     {
         long[] imgSize = getDimensions(img);
-        Img<DoubleType> res = ArrayImgs.doubles(imgSize);
 
-        //TODO
-        res = img.copy();
+        //Détermination des bords
+        RandomAccess<DoubleType> cursorIn = img.randomAccess();
+        long xmin=imgSize[0], xmax = 0, ymin=imgSize[1], ymax=0;
+        long[] pos = {0,0};
+        for(long x=0; x<imgSize[0];x++)
+        {
+            for(long y=0; y<imgSize[1];y++)
+            {
+                pos[0] = x;
+                pos[1] = y;
+                cursorIn.setPosition(pos);
+                if(cursorIn.get().getRealDouble()==0)
+                {
+                    if(x < xmin)
+                        xmin = x;
+                    if(x > xmax)
+                        xmax = x;
+                    if(y < ymin)
+                        ymin = y;
+                    if(y > ymax)
+                        ymax = y;
+                }
+            }
+        }
+        if(xmax < xmin || ymax < ymin)
+        {
+            log(Preparation.class,ERROR, "TicTacToe not detected");
+        }
 
+        //On copie
+        long[] newImgSize = {(xmax-xmin)+1, (ymax-ymin)+1};
+        Img<DoubleType> res = ArrayImgs.doubles(newImgSize);
+        RandomAccess<DoubleType> cursorOut = res.randomAccess();
+        long [] outPos = {0,0};
+        for(int x=0;x < newImgSize[0]; x++)
+        {
+            for(int y=0; y<newImgSize[0]; y++)
+            {
+                outPos[0] = x;
+                pos[0] = x+xmin;
+                outPos[1] = y;
+                pos[1] = y+ymin;
+                cursorIn.setPosition(pos);
+                cursorOut.setPosition(outPos);
+                cursorOut.get().set(cursorIn.get().getRealDouble());
+            }
+        }
         return res;
     }
 }

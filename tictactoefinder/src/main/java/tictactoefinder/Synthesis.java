@@ -5,7 +5,7 @@ import org.scijava.log.LogService;
 import java.util.ArrayList;
 
 public class Synthesis extends Step {
-    public static void showBoardAsMatrix(Integer[] matrix, LogService log)
+    public static void showBoardAsMatrix(Integer[] matrix)
     {
         StringBuilder sb = new StringBuilder();
         for(int i=0;i<3;i++)
@@ -17,9 +17,9 @@ public class Synthesis extends Step {
             }
             sb.append("\n");
         }
-        log.info(sb.toString());
+        log(Synthesis.class,INFO, sb.toString());
     }
-    public static void whoIsWinning(Integer[] matrix, LogService log)
+    public static void whoIsWinning(Integer[] matrix)
     {
         String winning = "";
         if(matrix[0] != 0 && matrix[0].equals(matrix[1]) && matrix[0].equals(matrix[2])) //horizontal
@@ -50,10 +50,10 @@ public class Synthesis extends Step {
 
         if(winning.equals(""))
         {
-            log.info("No winner yet\n");
+            log(Synthesis.class, INFO, "No winner yet\n");
         }else
         {
-            log.info(winning + " player won");
+            log(Synthesis.class, INFO, winning + " player won\n");
         }
 
     }

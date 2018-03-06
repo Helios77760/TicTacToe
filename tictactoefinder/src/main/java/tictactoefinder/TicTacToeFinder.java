@@ -42,8 +42,7 @@ public class TicTacToeFinder implements Command {
 
     private void computeTicTacToe(Dataset img, Dataset templateCircle, Dataset templateCross) {
 
-        //RandomAccess<? extends RealType<?>> imgCursor = img.randomAccess();
-
+        Step.logging=logService;
 
         Img<DoubleType> res = datasetToImgDouble(img);
         Img<DoubleType> circle = datasetToImgDouble(templateCircle);
@@ -75,8 +74,8 @@ public class TicTacToeFinder implements Command {
         }
 
         //Synthese
-        Synthesis.showBoardAsMatrix(matrix, logService);
-        Synthesis.whoIsWinning(matrix, logService);
+        Synthesis.showBoardAsMatrix(matrix);
+        Synthesis.whoIsWinning(matrix);
     }
 
     private Img<DoubleType> datasetToImgDouble(Dataset image)
