@@ -51,6 +51,7 @@ public class TicTacToeFinder implements Command {
         //Preparation
         res = Preparation.makeImageUniform(res);
         res = Preparation.threshold(res);
+        res = Preparation.swap(res);
         res = Preparation.clean(res);
         res = Preparation.crop(res);
 

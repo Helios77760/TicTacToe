@@ -7,10 +7,21 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 public abstract class Preparation extends Step{
+    public static final String GAUSSIANKERNEL = "0.00401\t0.005895\t0.007763\t0.009157\t0.009675\t0.009157\t0.007763\t0.005895\t0.00401\n" +
+            "0.005895\t0.008667\t0.011412\t0.013461\t0.014223\t0.013461\t0.011412\t0.008667\t0.005895\n" +
+            "0.007763\t0.011412\t0.015028\t0.017726\t0.018729\t0.017726\t0.015028\t0.011412\t0.007763\n" +
+            "0.009157\t0.013461\t0.017726\t0.020909\t0.022092\t0.020909\t0.017726\t0.013461\t0.009157\n" +
+            "0.009675\t0.014223\t0.018729\t0.022092\t0.023342\t0.022092\t0.018729\t0.014223\t0.009675\n" +
+            "0.009157\t0.013461\t0.017726\t0.020909\t0.022092\t0.020909\t0.017726\t0.013461\t0.009157\n" +
+            "0.007763\t0.011412\t0.015028\t0.017726\t0.018729\t0.017726\t0.015028\t0.011412\t0.007763\n" +
+            "0.005895\t0.008667\t0.011412\t0.013461\t0.014223\t0.013461\t0.011412\t0.008667\t0.005895\n" +
+            "0.00401\t0.005895\t0.007763\t0.009157\t0.009675\t0.009157\t0.007763\t0.005895\t0.00401";
     public static Img<DoubleType> makeImageUniform(Img<DoubleType> img)
     {
         long[] imgSize = getDimensions(img);
         Img<DoubleType> res = ArrayImgs.doubles(imgSize);
+
+
 
         //TODO
         res = img.copy();
@@ -131,6 +142,42 @@ public abstract class Preparation extends Step{
                 cursorIn.setPosition(pos);
                 cursorOut.setPosition(outPos);
                 cursorOut.get().set(cursorIn.get().getRealDouble());
+            }
+        }
+        return res;
+    }
+
+    public static Img<DoubleType> swap(Img<DoubleType> img) {
+        long[] dim = getDimensions(img);
+        long counter=0;
+        RandomAccess<DoubleType> cur = img.randomAccess();
+        long[] pos = new long[]{0,0};
+        for(int i=0; i<dim[0];i++)
+        {
+            pos[0]=i;
+            for(int j=0; j<dim[1];j++)
+            {
+                pos[1]=j;
+                cur.setPosition(pos);
+                if(cur.get().getRealDouble()>127)
+                    counter++;
+            }
+        }
+        if(counter > dim[0]*dim[1]/2)
+            return img;
+
+        Img<DoubleType> res = ArrayImgs.doubles(dim);
+        RandomAccess<DoubleType> curOut = res.randomAccess();
+        for(int i=0; i<dim[0];i++)
+        {
+            pos[0]=i;
+            for(int j=0; j<dim[1];j++)
+            {
+                pos[1]=j;
+                cur.setPosition(pos);
+                curOut.setPosition(pos);
+
+                curOut.get().set(255-cur.get().getRealDouble());
             }
         }
         return res;
