@@ -36,56 +36,68 @@ public abstract class Preparation extends Step{
         long[] imgSize = getDimensions(img);
         Img<DoubleType> res = ArrayImgs.doubles(imgSize);
         RandomAccess<DoubleType> curOut = res.randomAccess();
+        RandomAccess<DoubleType> curIn = img.randomAccess();
+        int ballRadius = 25;
 
-        String[] lines = GAUSSIANKERNEL.split("\n");
-        int xsize = lines.length;
-        double[][] kernel= new double[xsize][];
-        for(int i=0; i<xsize;i++)
+        //Rolling ball algorithm
+        double[][] kernel = generateBallKernel(ballRadius);
+        double max, value;
+        long[] pos = {0,0}, kpos = {0,0};
+        for(pos[0]=0; pos[0]<imgSize[0];pos[0]++)
         {
-            String[] values = lines[i].split("\t");
-            kernel[i] = new double[values.length];
-            for(int j=0; j<values.length;j++)
+            for(pos[1]=0; pos[1]<imgSize[1];pos[1]++)
             {
-                kernel[i][j] = Double.valueOf(values[j]);
-            }
-        }
-
-        Img<DoubleType> gradient = convolve(convolve(img, kernel), kernel);
-
-        final Double[] moy = {(double) 0};
-        final int[] numberOfValues = {0};
-        processImage(gradient, (p)->{
-            moy[0] +=p.getRealDouble();
-            numberOfValues[0]++;
-        });
-
-        if(numberOfValues[0] > 0)
-        {
-            RandomAccess<DoubleType> curIn = img.randomAccess();
-            RandomAccess<DoubleType> curGra = gradient.randomAccess();
-            double overallMoy = moy[0]/numberOfValues[0];
-            long[] pos = {0,0};
-            for(int x=0; x<imgSize[0];x++)
-            {
-                pos[0]=x;
-                for(int y=0; y<imgSize[1];y++)
+                curOut.setPosition(pos);
+                max=0;
+                for(int x=0; x<kernel.length;x++)
                 {
-                    pos[1]=y;
-                    curOut.setPosition(pos);
-                    curGra.setPosition(pos);
-
-                    curOut.get().set(curIn.get().getRealDouble()-(curGra.get().getRealDouble()-overallMoy));
-
+                    kpos[0]=pos[0]+x-ballRadius;
+                    if(kpos[0] >= 0 && kpos[0] < imgSize[0])
+                    for(int y=0; y<kernel[x].length;y++)
+                    {
+                        kpos[1]=pos[1]+y-ballRadius;
+                        if(kpos[1] >=0 && kpos[1] < imgSize[1])
+                        {
+                            curIn.setPosition(kpos);
+                            value = curIn.get().getRealDouble()*kernel[x][y];
+                            if(value > max)
+                            {
+                                max=value;
+                            }
+                        }
+                    }
                 }
+                curIn.setPosition(pos);
+                curOut.get().set(curIn.get().getRealDouble()+1 - max);
             }
-        }else
-        {
-            res = img.copy();
         }
-
         return res;
     }
 
+    private static double[][] generateBallKernel(int radius) {
+        int diameter = radius*2+1;
+        double[][] kernel =new double[diameter][diameter];
+        double distance, xdist, ydist;
+        for(int x=0; x<diameter;x++)
+        {
+            for(int y=0;y<diameter;y++)
+            {
+
+                xdist =Math.abs((x-radius)/radius);
+                ydist =Math.abs((y-radius)/radius);
+                distance = Math.sqrt(xdist*xdist + ydist*ydist);
+                if(distance> 1.0)
+                {
+                    kernel[x][y]=0;
+                }else
+                {
+                    kernel[x][y] = Math.sin(Math.acos(distance));
+                }
+            }
+        }
+
+        return kernel;
+    }
 
 
     /**

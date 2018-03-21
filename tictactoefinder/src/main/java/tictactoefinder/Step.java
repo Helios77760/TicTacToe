@@ -89,7 +89,7 @@ public abstract class Step {
 
         Img<DoubleType> res = ArrayImgs.doubles(imgSize);
         RandomAccess<DoubleType> curOut = res.randomAccess();
-        long[] pos = {0,0};
+        long[] pos = {0,0}, kpos = {0,0};
         double value, normalizer;
         for(int x=0; x<imgSize[0];x++)
         {
@@ -102,16 +102,16 @@ public abstract class Step {
                 normalizer=0;
                 for(int xkernel=0; xkernel<kernel.length;xkernel++)
                 {
-                    pos[0]=x+xkernel-xcenter;
-                    if(pos[0] >= 0 && pos[0] < imgSize[0])
+                    kpos[0]=x+xkernel-xcenter;
+                    if(kpos[0] >= 0 && kpos[0] < imgSize[0])
                     {
                         ycenter = kernel[xkernel].length/2;
                         for(int ykernel=0; ykernel<kernel[xkernel].length;ykernel++)
                         {
-                            pos[1]=y+ykernel-ycenter;
-                            if(pos[1] >= 0 && pos[1] < imgSize[1])
+                            kpos[1]=y+ykernel-ycenter;
+                            if(kpos[1] >= 0 && kpos[1] < imgSize[1])
                             {
-                                cur.setPosition(pos);
+                                cur.setPosition(kpos);
                                 value+=cur.get().getRealDouble()*kernel[xkernel][ykernel];
                                 normalizer+=kernel[xkernel][ykernel];
                             }

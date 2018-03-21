@@ -11,6 +11,34 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: net.imagej:imagej:2.0.0-rc-65" level="project" />
     <orderEntry type="library" name="Maven: net.imagej:imagej-common:0.24.9" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:imagej-notebook:0.2.3" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:imagej-ops:0.39.0" level="project" />
+    <orderEntry type="library" name="Maven: net.imglib2:imglib2-algorithm:0.8.2" level="project" />
+    <orderEntry type="library" name="Maven: net.imglib2:imglib2-algorithm-fft:0.1.5" level="project" />
+    <orderEntry type="library" name="Maven: net.imglib2:imglib2-realtransform:2.0.0-beta-38" level="project" />
+    <orderEntry type="library" name="Maven: jitk:jitk-tps:3.0.0" level="project" />
+    <orderEntry type="library" name="Maven: io.scif:scifio:0.33.0" level="project" />
+    <orderEntry type="library" name="Maven: org.scijava:scijava-common:2.69.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: net.imagej:imagej-scripting:0.7.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.scijava:scripting-beanshell:0.3.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: net.imagej:imagej-ui-swing:0.21.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jfree:jfreechart:1.5.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.scijava:scijava-plugins-platforms:0.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.commons:commons-lang3:3.7" level="project" />
+    <orderEntry type="library" name="Maven: org.scijava:script-editor:0.1.5" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:ij:1.51s" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:imagej-legacy:0.29.0" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:ij1-patcher:0.12.8" level="project" />
+    <orderEntry type="library" name="Maven: net.imglib2:imglib2:4.6.1" level="project" />
+    <orderEntry type="library" name="Maven: net.imglib2:imglib2-ij:2.0.0-beta-39" level="project" />
+    <orderEntry type="library" name="Maven: net.imglib2:imglib2-roi:0.4.7" level="project" />
+    <orderEntry type="library" name="Maven: org.scijava:scijava-search:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.scijava:scijava-ui-swing:0.9.5" level="project" />
+    <orderEntry type="library" name="Maven: org.javassist:javassist:3.22.0-GA" level="project" />
+    <orderEntry type="library" name="Maven: net.imglib2:imglib2-algorithm-gpl:0.2.2" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:imagej:2.0.0-rc-65" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:imagej-common:0.24.9" level="project" />
     <orderEntry type="library" name="Maven: edu.ucar:udunits:4.3.18" level="project" />
     <orderEntry type="library" name="Maven: net.imagej:imagej-notebook:0.2.3" level="project" />
     <orderEntry type="library" name="Maven: net.imagej:imagej-ops:0.39.0" level="project" />
