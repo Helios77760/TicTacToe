@@ -78,4 +78,56 @@ public abstract class Step {
         }
         return res;
     }
+
+    public static Img<DoubleType> convolve(Img<DoubleType> img, double[][] kernel)
+    {
+        long[] imgSize = getDimensions(img);
+        int xcenter = kernel.length/2;
+        int ycenter;
+
+        RandomAccess<DoubleType> cur = img.randomAccess();
+
+        Img<DoubleType> res = ArrayImgs.doubles(imgSize);
+        RandomAccess<DoubleType> curOut = res.randomAccess();
+        long[] pos = {0,0};
+        double value, normalizer;
+        for(int x=0; x<imgSize[0];x++)
+        {
+            pos[0]=x;
+            for(int y=0; y<imgSize[1];y++)
+            {
+                pos[1]=y;
+                curOut.setPosition(pos);
+                value=0;
+                normalizer=0;
+                for(int xkernel=0; xkernel<kernel.length;xkernel++)
+                {
+                    pos[0]=x+xkernel-xcenter;
+                    if(pos[0] >= 0 && pos[0] < imgSize[0])
+                    {
+                        ycenter = kernel[xkernel].length/2;
+                        for(int ykernel=0; ykernel<kernel[xkernel].length;ykernel++)
+                        {
+                            pos[1]=y+ykernel-ycenter;
+                            if(pos[1] >= 0 && pos[1] < imgSize[1])
+                            {
+                                cur.setPosition(pos);
+                                value+=cur.get().getRealDouble()*kernel[xkernel][ykernel];
+                                normalizer+=kernel[xkernel][ykernel];
+                            }
+                        }
+                    }
+                }
+                if(normalizer == 0)
+                {
+                    curOut.get().set(cur.get().getRealDouble());
+                }else
+                {
+                    curOut.get().set(value/normalizer);
+                }
+            }
+        }
+
+        return res;
+    }
 }

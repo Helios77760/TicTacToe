@@ -79,15 +79,15 @@ public class TicTacToeFinder implements Command {
         Synthesis.whoIsWinning(matrix);
     }
 
-    private Img<DoubleType> datasetToImgDouble(Dataset image)
+    public static Img<DoubleType> datasetToImgDouble(Dataset image)
     {
         long[] imgSize = getDimensions(image);
-        Img<DoubleType> res = ArrayImgs.doubles(imgSize);
+        Img<DoubleType> res = ArrayImgs.doubles(imgSize[0], imgSize[1]);
 
         RandomAccess<? extends RealType> cursorIn = image.randomAccess();
         RandomAccess<DoubleType> cursorOut = res.randomAccess();
 
-        long[] posIn = {0,0}, posOut = {0,0};
+        long[] posIn = new long[image.numDimensions()], posOut = new long[image.numDimensions()];
 
         for(int x=0; x<imgSize[0];x++)
         {
