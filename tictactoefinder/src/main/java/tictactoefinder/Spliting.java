@@ -178,8 +178,8 @@ public class Spliting extends Step {
             lines[i]=new Line(i,0);
             for(int j = 0; j<imgSize[i3]; j++)
             {
-                pos[0]=i;
-                pos[1]=j;
+                pos[i2]=i;
+                pos[i3]=j;
                 imgCursor.setPosition(pos);
                 lines[i].value+=imgCursor.get().getRealDouble();
             }
@@ -207,14 +207,14 @@ public class Spliting extends Step {
             {
                 subPos[0]=subx;
                 pos[0]=x;
-                for(long suby=0, y=borders[i][2]; subx < size[1]; suby++, y++)
+                for(long suby=0, y=borders[i][2]; suby < size[1]; suby++, y++)
                 {
                     subPos[1]=suby;
                     pos[1]=y;
                     imgCursor.setPosition(pos);
                     subCursor.setPosition(subPos);
 
-                    subCursor.get().set(imgCursor.get().getRealDouble());
+                    subCursor.get().set(imgCursor.get());
                 }
             }
 

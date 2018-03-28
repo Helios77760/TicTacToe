@@ -13,15 +13,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import java.util.Arrays;
 
-interface Test
-{
-    void run(Img<DoubleType> img);
-}
-
 @Plugin(type = Command.class, menuPath = "Plugins>TicTacToe Test>Test Preparation")
 public class TestPreparation implements Command {
-
-
 
     @Parameter
     DatasetService ds;

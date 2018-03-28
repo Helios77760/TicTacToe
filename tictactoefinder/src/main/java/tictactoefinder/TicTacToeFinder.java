@@ -1,5 +1,9 @@
 package tictactoefinder;
 
+import ij.ImagePlus;
+import ij.process.ImageConverter;
+import net.imagej.ImgPlus;
+import net.imglib2.type.numeric.integer.ByteType;
 import org.scijava.command.Command;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
@@ -26,27 +30,19 @@ public class TicTacToeFinder implements Command {
     @Parameter(label = "Image du TicTacToe")
     Dataset img;
 
-    @Parameter(label = "Template cercle")
-    Dataset templateCircle;
-
-    @Parameter(label = "Template croix")
-    Dataset templateCross;
-
     @Parameter
     LogService logService;
 
     @Override
     public void run() {
-        computeTicTacToe(img, templateCircle, templateCross);
+        computeTicTacToe(img);
     }
 
-    private void computeTicTacToe(Dataset img, Dataset templateCircle, Dataset templateCross) {
+    private void computeTicTacToe(Dataset img) {
 
         Step.logging=logService;
 
         Img<DoubleType> res = datasetToImgDouble(img);
-        Img<DoubleType> circle = datasetToImgDouble(templateCircle);
-        Img<DoubleType> cross = datasetToImgDouble(templateCross);
 
         //Preparation
         res = Preparation.makeImageUniform(res);
@@ -66,7 +62,7 @@ public class TicTacToeFinder implements Command {
             //Detection
             if(!DetectContent.isEmpty(tiles.get(i)))
             {
-                matrix[i] = DetectContent.isCircleByRegistration(tiles.get(i),circle, cross ) ? 1 : -1;
+                matrix[i] = DetectContent.isCircleByRegistration(tiles.get(i)) ? 1 : -1;
             }else
             {
                 matrix[i] = 0;
@@ -83,11 +79,10 @@ public class TicTacToeFinder implements Command {
     {
         long[] imgSize = getDimensions(image);
         Img<DoubleType> res = ArrayImgs.doubles(imgSize[0], imgSize[1]);
-
         RandomAccess<? extends RealType> cursorIn = image.randomAccess();
         RandomAccess<DoubleType> cursorOut = res.randomAccess();
 
-        long[] posIn = new long[image.numDimensions()], posOut = new long[image.numDimensions()];
+        long[] posIn = new long[image.numDimensions()], posOut = new long[2];
 
         for(int x=0; x<imgSize[0];x++)
         {
@@ -100,7 +95,6 @@ public class TicTacToeFinder implements Command {
                 cursorOut.get().set(cursorIn.get().getRealDouble());
             }
         }
-
         return res;
     }
 
