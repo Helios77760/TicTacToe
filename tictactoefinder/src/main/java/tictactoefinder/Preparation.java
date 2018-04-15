@@ -7,6 +7,9 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Preparation extends Step{
@@ -53,19 +56,19 @@ public abstract class Preparation extends Step{
                 {
                     kpos[0]=pos[0]+x-ballRadius;
                     if(kpos[0] >= 0 && kpos[0] < imgSize[0])
-                    for(int y=0; y<kernel[x].length;y++)
-                    {
-                        kpos[1]=pos[1]+y-ballRadius;
-                        if(kpos[1] >=0 && kpos[1] < imgSize[1])
+                        for(int y=0; y<kernel[x].length;y++)
                         {
-                            curIn.setPosition(kpos);
-                            value = curIn.get().getRealDouble()*kernel[x][y];
-                            if(value > max)
+                            kpos[1]=pos[1]+y-ballRadius;
+                            if(kpos[1] >=0 && kpos[1] < imgSize[1])
                             {
-                                max=value;
+                                curIn.setPosition(kpos);
+                                value = curIn.get().getRealDouble()*kernel[x][y];
+                                if(value > max)
+                                {
+                                    max=value;
+                                }
                             }
                         }
-                    }
                 }
                 curIn.setPosition(pos);
                 curOut.get().set(curIn.get().getRealDouble()+1 - max);
@@ -212,13 +215,129 @@ public abstract class Preparation extends Step{
 
     public static Img<DoubleType> clean(Img<DoubleType> img)
     {
+
+        double [][] kernel = {
+                {255,255,255},
+                {255,255,255},
+                {255,255,255}
+        };
+
+        Img<DoubleType> res = erosion(img, kernel);
+        res = dilatation(res, kernel);
+
+        return res;
+    }
+
+    public static Img<DoubleType> dilatation(Img<DoubleType> img, double [][] kernel) {
+
+        boolean stopKernel = false;
+
+        int xcenter = kernel.length / 2, ycenter;
+
         long[] imgSize = getDimensions(img);
         Img<DoubleType> res = ArrayImgs.doubles(imgSize);
 
+        RandomAccess<DoubleType> cursorImg = img.randomAccess();
+        RandomAccess<DoubleType> cursorRes = res.randomAccess();
+        RandomAccess<DoubleType> cursorImg2 = img.randomAccess();
 
-        //TODO
-        res = img.copy();
 
+        long[] pos = {0, 0}, kpos = {0,0};
+
+        for (int imgX = 0; imgX < imgSize[0]; imgX++) {
+            pos[0] = imgX;
+
+            for (int imgY = 0; imgY < imgSize[1]; imgY++) {
+
+                pos[1] = imgY;
+
+                cursorImg.setPosition(pos);
+                cursorRes.setPosition(pos);
+
+                stopKernel = false;
+
+                for (int xKernel = 0; xKernel < kernel.length; xKernel++) {
+                    kpos[0] = imgX + xKernel - xcenter;
+
+                    if (kpos[0] >= 0 && kpos[0] < imgSize[0]) {
+                        ycenter = kernel[xKernel].length / 2;
+                        for (int yKernel = 0; yKernel < kernel[xKernel].length; yKernel++) {
+                            kpos[1] = imgY + yKernel - ycenter;
+
+                            if (kpos[1] >= 0 && kpos[1] < imgSize[1]) {
+                                cursorImg2.setPosition(kpos);
+                                if (cursorImg2.get().getRealDouble() < kernel[xKernel][yKernel]) {
+                                    cursorRes.get().setReal(0);
+                                    stopKernel = true;
+                                    break;
+                                } else
+                                    cursorRes.get().setReal(255);
+                            }
+                        }
+                        if (stopKernel)
+                            break;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    public static Img<DoubleType> erosion(Img<DoubleType> img, double [][] kernel ){
+
+
+        boolean stopKernel = false;
+
+        int xcenter = kernel.length / 2, ycenter;
+
+        long[] imgSize = getDimensions(img);
+        Img<DoubleType> res = ArrayImgs.doubles(imgSize);
+
+        RandomAccess<DoubleType> cursorImg = img.randomAccess();
+        RandomAccess<DoubleType> cursorRes = res.randomAccess();
+        RandomAccess<DoubleType> cursorImg2 = img.randomAccess();
+
+
+        long[] pos = {0, 0}, kpos = {0,0};
+
+        for (int imgX = 0; imgX < imgSize[0]; imgX++) {
+            pos[0] = imgX;
+
+            for (int imgY = 0; imgY < imgSize[1]; imgY++) {
+
+
+                pos[1] = imgY;
+
+                cursorImg.setPosition(pos);
+                cursorRes.setPosition(pos);
+
+                stopKernel = false;
+
+                for (int xKernel = 0; xKernel < kernel.length; xKernel++) {
+                    kpos[0] = imgX + xKernel - xcenter;
+
+                    if (kpos[0] >= 0 && kpos[0] < imgSize[0]) {
+                        ycenter = kernel[xKernel].length / 2;
+                        for (int yKernel = 0; yKernel < kernel[xKernel].length; yKernel++) {
+                            kpos[1] = imgY + yKernel - ycenter;
+
+                            if (kpos[1] >= 0 && kpos[1] < imgSize[1]) {
+                                cursorImg2.setPosition(kpos);
+                                if (!(cursorImg2.get().getRealDouble() < kernel[xKernel][yKernel])) {
+                                    cursorRes.get().setReal(255);
+                                    stopKernel = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (stopKernel)
+                            break;
+                    }
+                }
+                if(!stopKernel){
+                    cursorRes.get().setReal(0);
+                }
+            }
+        }
         return res;
     }
 
