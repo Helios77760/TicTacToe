@@ -1,7 +1,6 @@
 package tictactoefinder;
 
 import net.imglib2.RandomAccess;
-import net.imglib2.algorithm.morphology.table2d.Clean;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.DoubleType;
