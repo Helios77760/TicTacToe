@@ -2,38 +2,12 @@ package tictactoefinder;
 
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class Preparation extends Step{
-    public static final String GAUSSIANKERNEL = "0.000563\t0.000683\t0.000813\t0.000947\t0.001081\t0.001209\t0.001325\t0.001423\t0.001498\t0.001544\t0.00156\t0.001544\t0.001498\t0.001423\t0.001325\t0.001209\t0.001081\t0.000947\t0.000813\t0.000683\t0.000563\n" +
-            "0.000683\t0.000829\t0.000986\t0.001149\t0.001312\t0.001467\t0.001608\t0.001727\t0.001817\t0.001874\t0.001893\t0.001874\t0.001817\t0.001727\t0.001608\t0.001467\t0.001312\t0.001149\t0.000986\t0.000829\t0.000683\n" +
-            "0.000813\t0.000986\t0.001173\t0.001366\t0.00156\t0.001745\t0.001912\t0.002054\t0.002161\t0.002228\t0.002251\t0.002228\t0.002161\t0.002054\t0.001912\t0.001745\t0.00156\t0.001366\t0.001173\t0.000986\t0.000813\n" +
-            "0.000947\t0.001149\t0.001366\t0.001592\t0.001817\t0.002033\t0.002228\t0.002393\t0.002518\t0.002596\t0.002622\t0.002596\t0.002518\t0.002393\t0.002228\t0.002033\t0.001817\t0.001592\t0.001366\t0.001149\t0.000947\n" +
-            "0.001081\t0.001312\t0.00156\t0.001817\t0.002075\t0.002321\t0.002543\t0.002731\t0.002874\t0.002963\t0.002994\t0.002963\t0.002874\t0.002731\t0.002543\t0.002321\t0.002075\t0.001817\t0.00156\t0.001312\t0.001081\n" +
-            "0.001209\t0.001467\t0.001745\t0.002033\t0.002321\t0.002596\t0.002845\t0.003055\t0.003215\t0.003315\t0.003349\t0.003315\t0.003215\t0.003055\t0.002845\t0.002596\t0.002321\t0.002033\t0.001745\t0.001467\t0.001209\n" +
-            "0.001325\t0.001608\t0.001912\t0.002228\t0.002543\t0.002845\t0.003118\t0.003349\t0.003524\t0.003633\t0.00367\t0.003633\t0.003524\t0.003349\t0.003118\t0.002845\t0.002543\t0.002228\t0.001912\t0.001608\t0.001325\n" +
-            "0.001423\t0.001727\t0.002054\t0.002393\t0.002731\t0.003055\t0.003349\t0.003596\t0.003784\t0.003901\t0.003941\t0.003901\t0.003784\t0.003596\t0.003349\t0.003055\t0.002731\t0.002393\t0.002054\t0.001727\t0.001423\n" +
-            "0.001498\t0.001817\t0.002161\t0.002518\t0.002874\t0.003215\t0.003524\t0.003784\t0.003982\t0.004105\t0.004147\t0.004105\t0.003982\t0.003784\t0.003524\t0.003215\t0.002874\t0.002518\t0.002161\t0.001817\t0.001498\n" +
-            "0.001544\t0.001874\t0.002228\t0.002596\t0.002963\t0.003315\t0.003633\t0.003901\t0.004105\t0.004233\t0.004276\t0.004233\t0.004105\t0.003901\t0.003633\t0.003315\t0.002963\t0.002596\t0.002228\t0.001874\t0.001544\n" +
-            "0.00156\t0.001893\t0.002251\t0.002622\t0.002994\t0.003349\t0.00367\t0.003941\t0.004147\t0.004276\t0.00432\t0.004276\t0.004147\t0.003941\t0.00367\t0.003349\t0.002994\t0.002622\t0.002251\t0.001893\t0.00156\n" +
-            "0.001544\t0.001874\t0.002228\t0.002596\t0.002963\t0.003315\t0.003633\t0.003901\t0.004105\t0.004233\t0.004276\t0.004233\t0.004105\t0.003901\t0.003633\t0.003315\t0.002963\t0.002596\t0.002228\t0.001874\t0.001544\n" +
-            "0.001498\t0.001817\t0.002161\t0.002518\t0.002874\t0.003215\t0.003524\t0.003784\t0.003982\t0.004105\t0.004147\t0.004105\t0.003982\t0.003784\t0.003524\t0.003215\t0.002874\t0.002518\t0.002161\t0.001817\t0.001498\n" +
-            "0.001423\t0.001727\t0.002054\t0.002393\t0.002731\t0.003055\t0.003349\t0.003596\t0.003784\t0.003901\t0.003941\t0.003901\t0.003784\t0.003596\t0.003349\t0.003055\t0.002731\t0.002393\t0.002054\t0.001727\t0.001423\n" +
-            "0.001325\t0.001608\t0.001912\t0.002228\t0.002543\t0.002845\t0.003118\t0.003349\t0.003524\t0.003633\t0.00367\t0.003633\t0.003524\t0.003349\t0.003118\t0.002845\t0.002543\t0.002228\t0.001912\t0.001608\t0.001325\n" +
-            "0.001209\t0.001467\t0.001745\t0.002033\t0.002321\t0.002596\t0.002845\t0.003055\t0.003215\t0.003315\t0.003349\t0.003315\t0.003215\t0.003055\t0.002845\t0.002596\t0.002321\t0.002033\t0.001745\t0.001467\t0.001209\n" +
-            "0.001081\t0.001312\t0.00156\t0.001817\t0.002075\t0.002321\t0.002543\t0.002731\t0.002874\t0.002963\t0.002994\t0.002963\t0.002874\t0.002731\t0.002543\t0.002321\t0.002075\t0.001817\t0.00156\t0.001312\t0.001081\n" +
-            "0.000947\t0.001149\t0.001366\t0.001592\t0.001817\t0.002033\t0.002228\t0.002393\t0.002518\t0.002596\t0.002622\t0.002596\t0.002518\t0.002393\t0.002228\t0.002033\t0.001817\t0.001592\t0.001366\t0.001149\t0.000947\n" +
-            "0.000813\t0.000986\t0.001173\t0.001366\t0.00156\t0.001745\t0.001912\t0.002054\t0.002161\t0.002228\t0.002251\t0.002228\t0.002161\t0.002054\t0.001912\t0.001745\t0.00156\t0.001366\t0.001173\t0.000986\t0.000813\n" +
-            "0.000683\t0.000829\t0.000986\t0.001149\t0.001312\t0.001467\t0.001608\t0.001727\t0.001817\t0.001874\t0.001893\t0.001874\t0.001817\t0.001727\t0.001608\t0.001467\t0.001312\t0.001149\t0.000986\t0.000829\t0.000683\n" +
-            "0.000563\t0.000683\t0.000813\t0.000947\t0.001081\t0.001209\t0.001325\t0.001423\t0.001498\t0.001544\t0.00156\t0.001544\t0.001498\t0.001423\t0.001325\t0.001209\t0.001081\t0.000947\t0.000813\t0.000683\t0.000563\n";
+
     public static Img<DoubleType> makeImageUniform(Img<DoubleType> img)
     {
         long[] imgSize = getDimensions(img);
@@ -74,7 +48,22 @@ public abstract class Preparation extends Step{
                 curOut.get().set(curIn.get().getRealDouble()+1 - max);
             }
         }
-        return res;
+        return rectifyValues(res);
+    }
+
+    private static Img<DoubleType> rectifyValues(Img<DoubleType> img)
+    {
+        double[] boundValues = {Double.MAX_VALUE, Double.MIN_VALUE};
+        processImage(img, (p)->{
+            double value = p.getRealDouble();
+            if(value < boundValues[0])
+                boundValues[0]=value;
+            if(value > boundValues[1])
+                boundValues[1]=value;
+        });
+        if(boundValues[1] - boundValues[0] <= 0)
+            return img.copy();
+        return createImageFrom(img,(p)-> (p.getRealDouble() - boundValues[0])*(255/(boundValues[1]-boundValues[0])));
     }
 
     private static double[][] generateBallKernel(int radius) {
@@ -213,134 +202,6 @@ public abstract class Preparation extends Step{
     }
 
 
-    public static Img<DoubleType> clean(Img<DoubleType> img)
-    {
-
-        double [][] kernel = {
-                {255,255,255},
-                {255,255,255},
-                {255,255,255}
-        };
-
-        Img<DoubleType> res = erosion(img, kernel);
-        res = dilatation(res, kernel);
-
-        return res;
-    }
-
-    public static Img<DoubleType> dilatation(Img<DoubleType> img, double [][] kernel) {
-
-        boolean stopKernel = false;
-
-        int xcenter = kernel.length / 2, ycenter;
-
-        long[] imgSize = getDimensions(img);
-        Img<DoubleType> res = ArrayImgs.doubles(imgSize);
-
-        RandomAccess<DoubleType> cursorImg = img.randomAccess();
-        RandomAccess<DoubleType> cursorRes = res.randomAccess();
-        RandomAccess<DoubleType> cursorImg2 = img.randomAccess();
-
-
-        long[] pos = {0, 0}, kpos = {0,0};
-
-        for (int imgX = 0; imgX < imgSize[0]; imgX++) {
-            pos[0] = imgX;
-
-            for (int imgY = 0; imgY < imgSize[1]; imgY++) {
-
-                pos[1] = imgY;
-
-                cursorImg.setPosition(pos);
-                cursorRes.setPosition(pos);
-
-                stopKernel = false;
-
-                for (int xKernel = 0; xKernel < kernel.length; xKernel++) {
-                    kpos[0] = imgX + xKernel - xcenter;
-
-                    if (kpos[0] >= 0 && kpos[0] < imgSize[0]) {
-                        ycenter = kernel[xKernel].length / 2;
-                        for (int yKernel = 0; yKernel < kernel[xKernel].length; yKernel++) {
-                            kpos[1] = imgY + yKernel - ycenter;
-
-                            if (kpos[1] >= 0 && kpos[1] < imgSize[1]) {
-                                cursorImg2.setPosition(kpos);
-                                if (cursorImg2.get().getRealDouble() < kernel[xKernel][yKernel]) {
-                                    cursorRes.get().setReal(0);
-                                    stopKernel = true;
-                                    break;
-                                } else
-                                    cursorRes.get().setReal(255);
-                            }
-                        }
-                        if (stopKernel)
-                            break;
-                    }
-                }
-            }
-        }
-        return res;
-    }
-    public static Img<DoubleType> erosion(Img<DoubleType> img, double [][] kernel ){
-
-
-        boolean stopKernel = false;
-
-        int xcenter = kernel.length / 2, ycenter;
-
-        long[] imgSize = getDimensions(img);
-        Img<DoubleType> res = ArrayImgs.doubles(imgSize);
-
-        RandomAccess<DoubleType> cursorImg = img.randomAccess();
-        RandomAccess<DoubleType> cursorRes = res.randomAccess();
-        RandomAccess<DoubleType> cursorImg2 = img.randomAccess();
-
-
-        long[] pos = {0, 0}, kpos = {0,0};
-
-        for (int imgX = 0; imgX < imgSize[0]; imgX++) {
-            pos[0] = imgX;
-
-            for (int imgY = 0; imgY < imgSize[1]; imgY++) {
-
-
-                pos[1] = imgY;
-
-                cursorImg.setPosition(pos);
-                cursorRes.setPosition(pos);
-
-                stopKernel = false;
-
-                for (int xKernel = 0; xKernel < kernel.length; xKernel++) {
-                    kpos[0] = imgX + xKernel - xcenter;
-
-                    if (kpos[0] >= 0 && kpos[0] < imgSize[0]) {
-                        ycenter = kernel[xKernel].length / 2;
-                        for (int yKernel = 0; yKernel < kernel[xKernel].length; yKernel++) {
-                            kpos[1] = imgY + yKernel - ycenter;
-
-                            if (kpos[1] >= 0 && kpos[1] < imgSize[1]) {
-                                cursorImg2.setPosition(kpos);
-                                if (!(cursorImg2.get().getRealDouble() < kernel[xKernel][yKernel])) {
-                                    cursorRes.get().setReal(255);
-                                    stopKernel = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (stopKernel)
-                            break;
-                    }
-                }
-                if(!stopKernel){
-                    cursorRes.get().setReal(0);
-                }
-            }
-        }
-        return res;
-    }
-
     public static Img<DoubleType> crop(Img<DoubleType> img)
     {
         long[] imgSize = getDimensions(img);
@@ -430,4 +291,6 @@ public abstract class Preparation extends Step{
         }
         return res;
     }
+
+
 }

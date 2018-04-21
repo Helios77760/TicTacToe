@@ -1,9 +1,5 @@
 package tictactoefinder;
 
-import ij.ImagePlus;
-import ij.process.ImageConverter;
-import net.imagej.ImgPlus;
-import net.imglib2.type.numeric.integer.ByteType;
 import org.scijava.command.Command;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
@@ -48,7 +44,7 @@ public class TicTacToeFinder implements Command {
         res = Preparation.makeImageUniform(res);
         res = Preparation.threshold(res);
         res = Preparation.swap(res);
-        res = Preparation.clean(res);
+        res = Cleaning.clean(res);
         res = Preparation.crop(res);
 
         //Decoupage

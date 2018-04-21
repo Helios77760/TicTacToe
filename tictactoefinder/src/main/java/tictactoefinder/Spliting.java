@@ -93,7 +93,7 @@ public class Spliting extends Step {
     }
 
     private static void decimateLines(Line[] detect, ArrayList<Integer> detectedLinesBegin, ArrayList<Integer> detectedLinesEnd) {
-        if(detectedLinesBegin.size()>2) //On a trouvé trop de lignes, on va ne garder que les plus contrastés
+        if(detectedLinesBegin.size()>2) //On a trouvé trop de lignes, on va ne garder que les plus contrastées
         {
             Line[] values = new Line[detectedLinesBegin.size()];
             for(int i=0; i<values.length;i++) //Pour chaque ligne...
@@ -115,15 +115,16 @@ public class Spliting extends Step {
             tempBegin.add(detectedLinesBegin.get(values[values.length-1].index));
             tempEnd.add(detectedLinesEnd.get(values[values.length-1].index));
 
-            Integer begin = detectedLinesBegin.get(values[values.length-2].index);
-            if(detectedLinesBegin.get(begin) > tempBegin.get(0)) //... dans le bon ordre
+            int index = values[values.length-2].index;
+            Integer begin = detectedLinesBegin.get(index);
+            if(begin > tempBegin.get(0)) //... dans le bon ordre
             {
-                tempBegin.add(detectedLinesBegin.get(begin));
-                tempEnd.add(detectedLinesEnd.get(begin));
+                tempBegin.add(detectedLinesBegin.get(index));
+                tempEnd.add(detectedLinesEnd.get(index));
             }else
             {
-                tempBegin.add(0, detectedLinesBegin.get(begin));
-                tempEnd.add(0, detectedLinesEnd.get(begin));
+                tempBegin.add(0, detectedLinesBegin.get(index));
+                tempEnd.add(0, detectedLinesEnd.get(index));
             }
 
             //Puis on modifie la liste principale afin de n'avoir que 2 lignes à l'intérieur

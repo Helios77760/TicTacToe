@@ -25,7 +25,7 @@ public class TestPreparation implements Command {
     @Parameter(type= ItemIO.OUTPUT)
     Dataset out;
 
-    @Parameter(label = "Fonction à tester", choices = {"makeImageUniform", "threshold", "clean", "crop", "swap"})
+    @Parameter(label = "Fonction à tester", choices = {"makeImageUniform", "threshold", "clean", "crop", "swap", "unrotate"})
     String testChoice;
 
     public static String[] choices = {
@@ -33,14 +33,16 @@ public class TestPreparation implements Command {
             "threshold",
             "clean",
             "crop",
-            "swap",};
+            "swap",
+            "unrotate"};
 
     public Test[] functions = {
             new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.makeImageUniform(img));}},
             new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.threshold(img));}},
-            new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.clean(img));}},
+            new Test(){public void run(Img<DoubleType> img){out = ds.create(Cleaning.clean(img));}},
             new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.crop(img));}},
-            new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.swap(img));}}
+            new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.swap(img));}},
+            new Test(){public void run(Img<DoubleType> img){out = ds.create(Improvement.unrotate(img));}}
     };
 
     @Override
