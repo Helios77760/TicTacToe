@@ -4,6 +4,7 @@ import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.DoubleType;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 
@@ -29,24 +30,15 @@ public class DetectContent extends Step {
         return val < EMPTYTHRESHOLD || val > 1-EMPTYTHRESHOLD;
     }
 
+
     public static boolean isCircleByRegistration(Img<DoubleType> img)
     {
-        long[] imgSize = getDimensions(img);
-
-        //TODO
-        boolean res = false;
-
-        return res;
+        throw new NotImplementedException();
     }
 
     public static boolean isCrossByAngledProjection(Img<DoubleType> img)
     {
-        long[] imgSize = getDimensions(img);
-
-        //TODO
-        boolean res = false;
-
-        return res;
+        throw new NotImplementedException();
     }
 
     public static boolean isCircleByFlooding(Img<DoubleType> img)
