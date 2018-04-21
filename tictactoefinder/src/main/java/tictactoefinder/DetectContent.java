@@ -10,15 +10,23 @@ import java.util.ArrayList;
 public class DetectContent extends Step {
 
     public static final double FLOODINGTHRESHOLD = 0.05;
-
+    public static final double EMPTYTHRESHOLD = 0.01;
     public static boolean isEmpty(Img<DoubleType> img)
     {
-        long[] imgSize = getDimensions(img);
-
-        //TODO
-        boolean res = false;
-
-        return res;
+        double[] values = {0,0};
+        processImage(img, (p)->{
+            if(p.getRealDouble() < 127)
+            {
+                values[0]++;
+            }else
+            {
+                values[1]++;
+            }
+        });
+        if(values[1] ==0)
+            return true;
+        double val = values[0]/(values[0]+values[1]);
+        return val < EMPTYTHRESHOLD || val > 1-EMPTYTHRESHOLD;
     }
 
     public static boolean isCircleByRegistration(Img<DoubleType> img)
@@ -45,7 +53,6 @@ public class DetectContent extends Step {
     {
         long[] imgSize = getDimensions(img);
 
-        boolean res=false;
         RandomAccess<DoubleType> curIn = img.randomAccess();
         Img<DoubleType> testImg = img.copy();
         RandomAccess<DoubleType> curTest = testImg.randomAccess();

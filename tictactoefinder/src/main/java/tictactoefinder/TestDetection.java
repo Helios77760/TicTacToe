@@ -14,6 +14,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import java.util.Arrays;
+import java.util.Random;
 
 @Plugin(type = Command.class, menuPath = "Plugins>TicTacToe Test>Test Detection")
 public class TestDetection implements Command {
@@ -30,7 +31,7 @@ public class TestDetection implements Command {
     @Parameter(label = "Fonction à tester", choices = {"isEmpty", "isCircleByRegistration", "isCrossByAngleProjection", "isCircleByFlooding"})
     String testChoice;
 
-    boolean value;
+    static boolean value;
 
     public static String[] choices = {"isEmpty", "isCircleByRegistration", "isCrossByAngleProjection", "isCircleByFlooding"};
 
@@ -55,6 +56,7 @@ public class TestDetection implements Command {
             RandomAccess<ByteType> cur = res.randomAccess();
             long[] pos = {0,0};
             functions[index].run(testImg);
+            Random rand = new Random();
             for(int i=0; i<100; i++)
             {
                 for(int j=0; j<100;j++)
@@ -62,6 +64,7 @@ public class TestDetection implements Command {
                     pos[0]=i;
                     pos[1]=j;
                     cur.setPosition(pos);
+                    //cur.get().set((byte)rand.nextInt(2));
                     cur.get().set(value ? (byte)1 : (byte)0);
                 }
             }

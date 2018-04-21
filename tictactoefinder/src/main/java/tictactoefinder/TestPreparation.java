@@ -25,7 +25,7 @@ public class TestPreparation implements Command {
     @Parameter(type= ItemIO.OUTPUT)
     Dataset out;
 
-    @Parameter(label = "Fonction à tester", choices = {"makeImageUniform", "threshold", "clean", "crop", "swap", "unrotate"})
+    @Parameter(label = "Fonction à tester", choices = {"makeImageUniform", "threshold", "clean", "crop", "swap", "unrotate", "eraseLines"})
     String testChoice;
 
     public static String[] choices = {
@@ -34,7 +34,8 @@ public class TestPreparation implements Command {
             "clean",
             "crop",
             "swap",
-            "unrotate"};
+            "unrotate",
+            "eraseLines"};
 
     public Test[] functions = {
             new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.makeImageUniform(img));}},
@@ -42,7 +43,8 @@ public class TestPreparation implements Command {
             new Test(){public void run(Img<DoubleType> img){out = ds.create(Cleaning.clean(img));}},
             new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.crop(img));}},
             new Test(){public void run(Img<DoubleType> img){out = ds.create(Preparation.swap(img));}},
-            new Test(){public void run(Img<DoubleType> img){out = ds.create(Improvement.unrotate(img));}}
+            new Test(){public void run(Img<DoubleType> img){out = ds.create(Improvement.unrotate(img));}},
+            new Test(){public void run(Img<DoubleType> img){out = ds.create(Spliting.eraseLines(img, Spliting.detection(img)));}}
     };
 
     @Override

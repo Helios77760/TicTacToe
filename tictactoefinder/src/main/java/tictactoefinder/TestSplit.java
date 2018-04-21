@@ -1,6 +1,5 @@
 package tictactoefinder;
 
-import ij.plugin.HyperStackMaker;
 import net.imagej.Dataset;
 import net.imagej.DatasetService;
 import net.imglib2.img.Img;

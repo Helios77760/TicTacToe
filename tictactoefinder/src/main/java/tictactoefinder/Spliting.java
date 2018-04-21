@@ -189,6 +189,7 @@ public class Spliting extends Step {
 
     public static ArrayList<Img<DoubleType>> split(Img<DoubleType> img, long[][] borders)
     {
+        img = eraseLines(img, borders);
         ArrayList<Img<DoubleType>> res = new ArrayList<>();
         RandomAccess<DoubleType> imgCursor = img.randomAccess();
 
@@ -223,5 +224,83 @@ public class Spliting extends Step {
         }
 
         return res;
+    }
+
+    public static Img<DoubleType> eraseLines(Img<DoubleType> img, long[][] borders)
+    {
+        long[] dim = getDimensions(img);
+        Img<DoubleType> res = img.copy();
+        RandomAccess<DoubleType> cur = res.randomAccess();
+        long[] pos = {0,0};
+        int x=0,y=0;
+        do {
+            //On cherche un point noir de la grille
+            for(; x <dim[0];x++)
+            {
+                for(;y<dim[1];y++)
+                {
+                    if(!isContainedIn(x,y, borders)) //Faire partie de la grille, ça veut dire qu'on ne fait pas partie des cases
+                    {
+                        pos[0]=x;
+                        pos[1]=y;
+                        cur.setPosition(pos);
+                        if(cur.get().getRealDouble() < 127)
+                            break;
+                    }
+                }
+                if(y < dim[1])
+                    break;
+                y=0;
+            }
+            if(x < dim[0]) //Si on a trouvé un point noir
+            {
+                //Inondation du noir par du blanc pour éliminer les lignes
+                pos[0]=x;
+                pos[1]=y;
+                cur.setPosition(pos);
+                ArrayList<long[]> posFIFO = new ArrayList<>();
+                posFIFO.add(new long[]{pos[0], pos[1]});
+                long[] offpos = pos;
+                while(!posFIFO.isEmpty())
+                {
+                    pos = posFIFO.remove(posFIFO.size()-1);
+                    cur.setPosition(pos);
+                    cur.get().set(255);
+                    for(int offx=-1; offx < 2; offx++)
+                    {
+                        for(int offy=-1; offy < 2; offy++)
+                        {
+                            offpos[0] = pos[0]+offx;
+                            offpos[1] = pos[1]+offy;
+                            if(offpos[0] >= 0 && offpos[0]<dim[0] && offpos[1] >= 0 && offpos[1]<dim[1])
+                            {
+                                cur.setPosition(offpos);
+                                if(cur.get().getRealDouble() < 127)
+                                {
+                                    cur.get().set(255);
+                                    posFIFO.add(new long[]{offpos[0], offpos[1]});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }while(x <dim[0]);
+
+        return res;
+    }
+
+    private static boolean isContainedIn(long x, long y, long[][] borders)
+    {
+        assert borders.length == 9;
+        return (x >= borders[0][0] && x<borders[0][1] && y>=borders[0][2] && y<borders[0][3]) ||
+                (x >= borders[1][0] && x<borders[1][1] && y>=borders[1][2] && y<borders[1][3]) ||
+                (x >= borders[2][0] && x<borders[2][1] && y>=borders[2][2] && y<borders[2][3]) ||
+                (x >= borders[3][0] && x<borders[3][1] && y>=borders[3][2] && y<borders[3][3]) ||
+                (x >= borders[4][0] && x<borders[4][1] && y>=borders[4][2] && y<borders[4][3]) ||
+                (x >= borders[5][0] && x<borders[5][1] && y>=borders[5][2] && y<borders[5][3]) ||
+                (x >= borders[6][0] && x<borders[6][1] && y>=borders[6][2] && y<borders[6][3]) ||
+                (x >= borders[7][0] && x<borders[7][1] && y>=borders[7][2] && y<borders[7][3]) ||
+                (x >= borders[8][0] && x<borders[8][1] && y>=borders[8][2] && y<borders[8][3]);
     }
 }
