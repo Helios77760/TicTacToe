@@ -1,9 +1,13 @@
 package tictactoefinder;
 
 public class Synthesis extends Step {
-    public static void showBoardAsMatrix(Integer[] matrix)
+    public static void showResults(Integer[] matrix)
     {
-        StringBuilder sb = new StringBuilder("\n");
+        log(Synthesis.class, INFO, "Résultats : \n" +showBoardAsMatrix(matrix) + whoIsWinning(matrix));
+    }
+    private static String showBoardAsMatrix(Integer[] matrix)
+    {
+        StringBuilder sb = new StringBuilder();
         for(int i=0;i<3;i++)
         {
             for(int j=0; j<3;j++)
@@ -13,9 +17,9 @@ public class Synthesis extends Step {
             }
             sb.append("\n");
         }
-        log(Synthesis.class,INFO, sb.toString());
+        return sb.toString();
     }
-    public static void whoIsWinning(Integer[] matrix)
+    private static String whoIsWinning(Integer[] matrix)
     {
         String winning = "";
         if(matrix[0] != 0 && matrix[0].equals(matrix[1]) && matrix[0].equals(matrix[2])) //horizontal
@@ -46,10 +50,16 @@ public class Synthesis extends Step {
 
         if(winning.equals(""))
         {
-            log(Synthesis.class, INFO, "No winner yet\n");
+            if(matrix[0] != 0 && matrix[1] != 0 && matrix[2] != 0 && matrix[3] != 0 && matrix[4] != 0 && matrix[5] != 0 && matrix[6] != 0 && matrix[7] != 0 && matrix[8] != 0)
+            {
+                return "Egalité";
+            }else
+            {
+                return "Partie non terminée";
+            }
         }else
         {
-            log(Synthesis.class, INFO, winning + " player won\n");
+            return "Joueur " +winning + " gagne";
         }
 
     }

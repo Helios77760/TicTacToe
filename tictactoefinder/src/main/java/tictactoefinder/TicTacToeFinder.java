@@ -16,6 +16,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import java.util.ArrayList;
 
 import static tictactoefinder.Step.getDimensions;
+import static tictactoefinder.Step.log;
 
 @Plugin(type = Command.class, menuPath = "Plugins>TicTacToe Finder")
 public class TicTacToeFinder implements Command {
@@ -35,25 +36,34 @@ public class TicTacToeFinder implements Command {
     }
 
     private void computeTicTacToe(Dataset img) {
-
         Step.logging=logService;
+        long start = System.currentTimeMillis();
 
+        log(TicTacToeFinder.class, Step.WARN, "Analyze commencée...");
         Img<DoubleType> res = datasetToImgDouble(img);
 
         //Preparation
+        log(TicTacToeFinder.class, Step.INFO, "Uniformisation de l'éclairage...");
         res = Preparation.makeImageUniform(res);
+        log(TicTacToeFinder.class, Step.INFO, "Binarisation...");
         res = Preparation.threshold(res);
+        log(TicTacToeFinder.class, Step.INFO, "Inversion si besoin...");
         res = Preparation.swap(res);
+        log(TicTacToeFinder.class, Step.INFO, "Nettoyage...");
         res = Cleaning.clean(res);
+        log(TicTacToeFinder.class, Step.INFO, "Rognage...");
         res = Preparation.crop(res);
+        log(TicTacToeFinder.class, Step.INFO, "Rectification de l'angle...");
         res = Improvement.unrotate(res);
 
         //Decoupage
+        log(TicTacToeFinder.class, Step.INFO, "Détection de la grille...");
         long[][] borders = Spliting.detection(res);
+        log(TicTacToeFinder.class, Step.INFO, "Découpage de la grille...");
         ArrayList<Img<DoubleType>> tiles = Spliting.split(res, borders);
 
         Integer[] matrix = new Integer[9];
-
+        log(TicTacToeFinder.class, Step.INFO, "Détection des cases en cours...\n");
         for(int i=0; i<9;i++)
         {
             //Detection
@@ -64,12 +74,12 @@ public class TicTacToeFinder implements Command {
             {
                 matrix[i] = 0;
             }
-
         }
 
         //Synthese
-        Synthesis.showBoardAsMatrix(matrix);
-        Synthesis.whoIsWinning(matrix);
+        Synthesis.showResults(matrix);
+        long end = System.currentTimeMillis();
+        log(TicTacToeFinder.class, Step.WARN, "Analyze terminée en "+ String.format("%.3f",(end-start)/1000.0) + "s\n");
     }
 
     public static Img<DoubleType> datasetToImgDouble(Dataset image)

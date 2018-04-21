@@ -4,20 +4,17 @@ Projet d'imagerie de reconnaissance d'un jeu de TicTacToe.
 
 Auteurs : Dylan BRASSEUR, Jérémy MEYNADIER
 
-##Pour le tester :
+## Pour le tester :
 
 1. Téléchargez la dernière version de ce dépot
 2. Importer le projet Maven dans Eclipse (ou ouvrez le projet existant dans Intellij Idea)
 3. Lancez via LaunchImageJ
 4. Ouvrez votre image de TicTacToe
-5. Ouvrez la console (Window > Console)
-6. Lancez le plugin TicTacToeFinder (Plugin > TicTacToe Finder)
-7. Patientez le temps du traitement
-8. Les lignes "Synthesis" donnent le résultat du traitement : 
-   - La premiere donne le plateau reconnu
-   - La seconde donne l'état actuel de la partie
+5. Lancez le plugin TicTacToeFinder (Plugin > TicTacToe Finder)
+6. Patientez le temps du traitement (la console devrait s'ouvrir)
+7. Les lignes "Synthesis" sur la console donnent le résultat du traitement : le plateau reconnu et l'état de la partie
     
-##Contraintes de l'image
+## Contraintes de l'image
 
 - Pas plus de 1000x1000 (pour des raisons de performances)
 - Les traits doivent faire entre 5 et 40 pixels de large (pour s'assurer que les nettoyages et correction d'éclairage fonctionnent correctement)
@@ -26,7 +23,7 @@ Auteurs : Dylan BRASSEUR, Jérémy MEYNADIER
 - Une seule couleur pour tous les traits (cercles, croix et grille)
 - Fond uni distingable des traits
 
-##Fonctionnalités
+## Fonctionnalités
 
 - [x] Correction de l'éclairage (Dylan)
 - [x] Rectification de l'angle (Dylan)
