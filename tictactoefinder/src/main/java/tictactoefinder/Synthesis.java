@@ -1,13 +1,9 @@
 package tictactoefinder;
 
-import org.scijava.log.LogService;
-
-import java.util.ArrayList;
-
 public class Synthesis extends Step {
     public static void showBoardAsMatrix(Integer[] matrix)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("\n");
         for(int i=0;i<3;i++)
         {
             for(int j=0; j<3;j++)

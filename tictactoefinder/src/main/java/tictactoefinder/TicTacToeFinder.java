@@ -46,6 +46,7 @@ public class TicTacToeFinder implements Command {
         res = Preparation.swap(res);
         res = Cleaning.clean(res);
         res = Preparation.crop(res);
+        res = Improvement.unrotate(res);
 
         //Decoupage
         long[][] borders = Spliting.detection(res);
@@ -58,7 +59,7 @@ public class TicTacToeFinder implements Command {
             //Detection
             if(!DetectContent.isEmpty(tiles.get(i)))
             {
-                matrix[i] = DetectContent.isCircleByRegistration(tiles.get(i)) ? 1 : -1;
+                matrix[i] = DetectContent.isCircleByFlooding(tiles.get(i)) ? 1 : -1;
             }else
             {
                 matrix[i] = 0;
