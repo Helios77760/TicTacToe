@@ -47,8 +47,8 @@ public class TicTacToeFinder implements Command {
         res = Preparation.makeImageUniform(res);
         log(TicTacToeFinder.class, Step.INFO, "Binarisation...");
         res = Preparation.threshold(res);
-        log(TicTacToeFinder.class, Step.INFO, "Inversion si besoin...");
-        res = Preparation.swap(res);
+        //log(TicTacToeFinder.class, Step.INFO, "Inversion si besoin...");
+        //res = Preparation.swap(res);
         log(TicTacToeFinder.class, Step.INFO, "Nettoyage...");
         res = Cleaning.clean(res);
         log(TicTacToeFinder.class, Step.INFO, "Rognage...");

@@ -21,17 +21,17 @@ Auteurs : Dylan BRASSEUR, Jérémy MEYNADIER
 - Les cercles doivent être fermés
 - La grille doit être composée de 4 traits, perpendiculaires (à peu près) , séparant les différentes cases
 - Une seule couleur pour tous les traits (cercles, croix et grille)
-- Fond uni distingable des traits
+- Fond uni clair distingable des traits sombres
 
 ## Fonctionnalités
 
 - [x] Correction de l'éclairage (Dylan)
 - [x] Rectification de l'angle (Dylan)
 - [x] Binarisation (Jérémy et Dylan)
-- [x] Image en négatif (Dylan)
+- [x] ~~Image en négatif (Dylan)~~ (Incompatible avec la correction de l'éclairage)
 - [x] Correction du bruit type "poivre et sel" (Jérémy)
 - [x] Détection des lignes de la grille, même si elles ne sont pas parfaitement droites (Dylan)
 - [x] Détection des cases vides par pourcentage (Dylan)
 - [x] Détection des cercles fermés par inondation (Dylan)
 - [ ] Détection des croix par projection
-- [ ] Détection des cercles par recadrage
+- [ ] Détection des cercles par recalage
