@@ -19,6 +19,7 @@ Auteurs : Dylan BRASSEUR, Jérémy MEYNADIER
 - Pas plus de 1000x1000 (pour des raisons de performances)
 - Les traits doivent faire entre 5 et 40 pixels de large (pour s'assurer que les nettoyages et correction d'éclairage fonctionnent correctement)
 - Les cercles doivent être fermés
+- Les cercles ou les croix ne doivent pas toucher la grille
 - La grille doit être composée de 4 traits, perpendiculaires (à peu près) , séparant les différentes cases
 - Une seule couleur pour tous les traits (cercles, croix et grille)
 - Fond uni clair distingable des traits sombres
