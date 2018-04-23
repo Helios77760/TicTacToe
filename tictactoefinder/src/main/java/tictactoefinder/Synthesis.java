@@ -10,14 +10,15 @@ public class Synthesis extends Step {
         StringBuilder sb = new StringBuilder();
         for(int i=0;i<3;i++)
         {
+            sb.append("-------\n").append("|");
             for(int j=0; j<3;j++)
             {
                 Integer value = matrix[i*3+j];
-                sb.append(value == 0 ? " ": value > 0 ? "O":"X");
+                sb.append(value == 0 ? " ": value > 0 ? "O":"X").append("|");
             }
             sb.append("\n");
         }
-        return sb.toString();
+        return sb.append("-------\n").toString();
     }
     private static String whoIsWinning(Integer[] matrix)
     {

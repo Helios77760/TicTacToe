@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DetectContent extends Step {
 
-    public static final double FLOODINGTHRESHOLD = 0.05;
+    public static final double FLOODINGTHRESHOLD = 0.01;
     public static final double EMPTYTHRESHOLD = 0.01;
     public static boolean isEmpty(Img<DoubleType> img)
     {
