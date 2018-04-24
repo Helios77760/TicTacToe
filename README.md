@@ -14,7 +14,7 @@ Auteurs : Dylan BRASSEUR, Jérémy MEYNADIER
 4. Ouvrez votre image de TicTacToe
 5. Lancez le plugin TicTacToeFinder (Plugin > TicTacToe Finder)
 6. Patientez le temps du traitement (la console devrait s'ouvrir)
-7. Les lignes "Synthesis" sur la console donnent le résultat du traitement : le plateau reconnu (à 90° prêt) et l'état de la partie
+7. Les lignes "Synthesis" sur la console donnent le résultat du traitement : le plateau reconnu (à 90° près) et l'état de la partie
     
 ## Contraintes de l'image
 
