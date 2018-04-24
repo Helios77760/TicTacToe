@@ -8,11 +8,13 @@ Auteurs : Dylan BRASSEUR, Jérémy MEYNADIER
 
 1. Téléchargez la dernière version de ce dépot
 2. Importer le projet Maven dans Eclipse (ou ouvrez le projet existant dans Intellij Idea)
-3. Lancez via LaunchImageJ
+3. Lancez via LaunchImageJ 
+   * sur Eclipse : licence3.image/launchImageJ/src/.../LaunchImageJ.java : clic droit 'Run As' > 'Run configurations' > 'Run'
+   * sur IDEA : TicTacToe/launchImageJ/src/.../LaunchImageJ : clic droit "Run 'LaunchImageJ.main()'" 
 4. Ouvrez votre image de TicTacToe
 5. Lancez le plugin TicTacToeFinder (Plugin > TicTacToe Finder)
 6. Patientez le temps du traitement (la console devrait s'ouvrir)
-7. Les lignes "Synthesis" sur la console donnent le résultat du traitement : le plateau reconnu et l'état de la partie
+7. Les lignes "Synthesis" sur la console donnent le résultat du traitement : le plateau reconnu (à 90° prêt) et l'état de la partie
     
 ## Contraintes de l'image
 
